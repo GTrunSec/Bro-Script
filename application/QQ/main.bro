@@ -1,16 +1,15 @@
+
 @load data
-event http_request(c: connection, method: string, original_URI: string, unescaped_URI: string, version: string)  
+event http_all_headers(c: connection, is_orig: bool, hlist: mime_header_list)
 
 {
-    if (c$http$host in QQDOMAIN::domains)
-    {
-        print fmt("%s,(%s)",c$http$host,c$http$user_agent);
-    }
-  if (/vuin/ in c$http$uri)
+
+  if (/vuin/ in c$http$uri && c$http$host in QQDOMAIN::domains)
   {
-     # print c$http$uri;
-      local v: string;
-      print fmt("%s",c$http$uri);
-      
-      }
+  local temp: table[count] of string;
+  temp=split_all(c$http$uri,/^\uin=/);
+  temp=split_all(temp[3],/\&/);
+  
+  print fmt("host=%s, user_agent=%s,QQ=%s",c$http$host,c$http$user_agent,temp[1]);
+  }
 }
