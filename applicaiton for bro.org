@@ -1,0 +1,46 @@
+
+* Testing & Quiclystart
+- Bash installation
+参考Hardenedlinux的bash安装
+- Testing all services
+  - Bash 安装
+- Loading bro scripts
+ -使用reply bash测试
+- print data
+* filter
+** Ref
+--> filterinfo.bro 过滤掉ref以及info_code不出现在http_logs，做信息冗余其他Logs类同
+* Http
+** Sum_COUNT
+https://github.com/0xxon/bro-sumstats-counttable
+从以上现存脚本，我们可以改写很多Keywork的统计添加到logs
+10min-http-method.bro
+统计了10分钟的mehtod count.
+
+** Large flow[1/1]
+- 通过request body大小，增加到一个Notice记录到http_log，(可以建立在其他应用和特征上)
+http_large_flow 设定一个bad_len范围
+  + [X] [] https://github.com/theflakes/bro-large_uploads
+    - 参阅large_uploads，可以做其他方面的流量Notice
+* DNS
+** DNS_count
+ https://github.com/JustinAzoff/bro-pdns
+目前采用以上方式
+** 完全Bro_Script来解决统计DNS问题
+- Workflow
+  1. 通过SumStats统计以及topk和SumStats_LAST来实现并且添加时间标签
+  2. 通过自带的Sql库，来写入到Sql
+存在问题在大流量下可能会产生性能消耗。
+
+* Application
+** QQ
+ - Exp:
+   1. 匹配含有/qq/的http$host（输出user_agent以及host，版本号目前没大规模流量测试特征。）
+   2. 匹配含有vuin的信息      -(匹配uin=*&之间的qq摘选出来以及其他type)/psb?/V13JKMGm3AuWFf/JW47M2FbmQBN0fNemE5hq67L5vc*OjgwKSWtM..M1OU!/c/dGoBAAAAAAAA&ek=1&kp=1&pt=0&bo=rBEsCAAAAAAAAL8!&t=6&su=0254543105&vuin=312764878&tm=1524463200&mType=qzPicd
+/code.cgi?appid=20134&platform=android&domain=canvas.gdt.qq.com&cgi=/canvas/1&type=1&code=0&time=816&rate=1&app=mqq&uin=312764878&expansion1=0&expansion2=NONE
+   3. 可指定Notice信息增加到Http::Log一条applicaitons（但目前这样的识别特征尚不确定。其他app效仿）
+* Bat
+明天测试上传
+* Logstash
+** Syslog
+Demo已完成，修改测试数据格式到syslog在转发到KAFKA端口即可。
