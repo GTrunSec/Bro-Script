@@ -21,3 +21,4 @@ event http_request(c: connection, method: string, original_URI: string, unescape
 {      
  SumStats::observe("http.method",[],[$str=method]);
 }
+
