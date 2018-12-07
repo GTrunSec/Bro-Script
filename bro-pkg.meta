@@ -1,0 +1,6 @@
+[package]
+description = migrate 2.5 to 2.6
+tags = private
+script_dir = cache
+depends =
+    bro >=2.5.0
